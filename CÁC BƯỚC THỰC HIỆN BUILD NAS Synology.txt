@@ -1,0 +1,34 @@
+==CÁC BƯỚC THỰC HIỆN BUILD NAS SYNOLOGY 7. (DS3615xs) BẰNG TINYCORE REDPILL
+
+**Tải các source và phần mềm cần thiết:
+	- Tinycore redpill: https://github.com/pocopico/tinycore-redpill		//Giả lập Synology
+	- DiskStation Manager (DSM): https://archive.synology.com/download/Os/DSM	//Hệ điều hành chạy NAS tương ứng với phiên bản Synology
+	- PuTTY: https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html		//SSH, Telnet,...
+	- Rufus: https://rufus.ie/vi/							//Tạo boot
+	- Synology Assistant: https://www.synology.com/vi-vn/support/download		//Tìm kiếm máy chủ Synology trong mạng cục bộ, kết nối, thiết lập Wake on LAN (WOL)
+
+**Tạo USB boot Tinycore redpill: Sử dụng Rufus => boot Tinycore Redpill => chạy lệnh ipconfig để check địa chỉ IP máy
+
+**SSH tới máy chạy Tinycore Redpill: Mở phần mềm PuTTY => nhập IP máy
+
+**Nhập tài khoản:
+	user: tc
+	pass: P@ssw0rd
+
+**Chạy các lệnh:
+	1. ./rploader.sh update now			// cập nhật phiên bản
+	2. ./rploader.sh fullupgrade now		// nâng cấp phiên bản
+	3. ./rploader.sh identifyusb now		// tự động cập nhật VID và PID của USB cho hệ thống
+	4. ./rploader.sh satamap now			// cập nhật Sata Map cho hệ thống
+	5. ./rploader.sh serialgen DS3615xs realmac	// cập nhật serial thiết bị
+	6. ./rploader.sh build ds3615xs-7.0.1-42218	//
+hoặc	   ./rploader.sh build ds3615xs-7.1.1-42962	// nạp phiên bản DS3615xs (lưu ý chọn đúng phiên bản muốn cài)
+	7. ./rploader.sh backup				// sao lưu cấu hình vừa cài đặt
+	8. exitcheck.sh reboot				// khởi động lại NAS
+
+**Kết nối vài cài đặt NAS: Mở phần mềm Synology Assistant => Search => Connect => Install => Chọn file DSM (DS3615xs) => Start => ...
+	- Tạo thông tin DSM: Device name, Admin account, pass (không có ký tự trùng với admin acc)
+	- Cập nhật DSM: Chọn Notify... (cập nhật thủ công)
+	- Tạo tài khoản Synology: Skip
+	- Device Analytics (Synology thu thập thông tin và báo cáo về server giúp xử lý sự cố phát sinh): Không check => Submit => Tạo phần vùng lưu trữ dữ liệu => Set IP tĩnh
+=> XONG
